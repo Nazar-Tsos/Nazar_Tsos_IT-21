@@ -1,0 +1,83 @@
+//Варіант 1
+const numbers = [5, 10, 3, 8, 15, 7];
+
+const average = numbers.reduce((sum, num) => sum + num, 0) / numbers.length;
+
+const max = Math.max(...numbers);
+const min = Math.min(...numbers);
+
+const sorted = [...numbers].sort((a, b) => a - b);
+
+console.log("Масив:", numbers);
+console.log("Середнє:", average);
+console.log("Максимум:", max);
+console.log("Мінімум:", min);
+console.log("Відсортований:", sorted);
+
+
+//Варіант 2
+const users = [
+  { name: "Іван", age: 20 },
+  { name: "Марія", age: 17 },
+  { name: "Олег", age: 25 },
+  { name: "Анна", age: 19 }
+];
+
+const adults = users.filter(user => user.age > 18);
+
+const names = users.map(user => user.name);
+
+const averageAge = users.reduce((sum, user) => sum + user.age, 0) / users.length;
+
+console.log("Користувачі 18+:", adults);
+console.log("Імена:", names);
+console.log("Середній вік:", averageAge);
+
+
+//Варіант 3
+const products = [
+  { name: "Ноутбук", category: "Техніка" },
+  { name: "Телефон", category: "Техніка" },
+  { name: "Хліб", category: "Продукти" },
+  { name: "Молоко", category: "Продукти" }
+];
+
+const grouped = products.reduce((acc, product) => {
+  if (!acc[product.category]) {
+    acc[product.category] = [];
+  }
+  acc[product.category].push(product.name);
+  return acc;
+}, {});
+
+console.log("Згруповані товари:");
+for (let category in grouped) {
+  console.log(`${category}: ${grouped[category].join(", ")}`);
+}
+
+
+//Варіант 4
+const students = {
+  Іван: { math: 80, physics: 75, english: 90 },
+  Марія: { math: 95, physics: 85, english: 88 },
+  Олег: { math: 70, physics: 60, english: 65 }
+};
+
+for (let student in students) {
+  const grades = Object.values(students[student]);
+  const average =
+    grades.reduce((sum, grade) => sum + grade, 0) / grades.length;
+
+  console.log(`${student}: середній бал = ${average.toFixed(2)}`);
+}
+
+
+//Варіант 5
+const names = ["Іван", "Марія", "Олег", "Анна"];
+
+const nameLengths = names.reduce((acc, name) => {
+  acc[name] = name.length;
+  return acc;
+}, {});
+
+console.log("Об'єкт довжин імен:", nameLengths);
