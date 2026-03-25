@@ -1,0 +1,102 @@
+//Практична 1
+let age = prompt("Введіть ваш вік:");
+
+age = Number(age);
+
+if (age < 18) {
+    alert("Вам заборонено вхід");
+} else if (age >= 18 && age <= 65) {
+    alert("Ласкаво просимо!");
+} else if (age > 65) {
+    alert("Будь ласка, будьте обережні!");
+} else {
+    alert("Введено некоректні дані");
+}
+
+
+//Практична 2
+let n = prompt("Введіть число:");
+n = Number(n);
+
+for (let i = 2; i <= n; i++) {
+    if (i % 2 === 0) {
+        console.log(i);
+    }
+}
+
+
+//Практична 3
+let n = prompt("Введіть число:");
+n = Number(n);
+
+let factorial = 1;
+let i = 1;
+
+while (i <= n) {
+    factorial *= i;
+    i++;
+}
+
+console.log("Факторіал:", factorial);
+
+
+//Практична 4
+let a = Number(prompt("Введіть перше число:"));
+let b = Number(prompt("Введіть друге число:"));
+let operation = prompt("Введіть операцію (+, -, *, /):");
+
+let result;
+
+switch (operation) {
+    case "+":
+        result = a + b;
+        break;
+    case "-":
+        result = a - b;
+        break;
+    case "*":
+        result = a * b;
+        break;
+    case "/":
+        if (b === 0) {
+            result = "Ділення на нуль неможливе";
+        } else {
+            result = a / b;
+        }
+        break;
+    default:
+        result = "Невідома операція";
+}
+
+alert("Результат: " + result);
+
+
+//Практична 5
+let randomNumber = Math.floor(Math.random() * 100) + 1;
+let userNumber;
+
+do {
+    userNumber = Number(prompt("Вгадайте число від 1 до 100:"));
+
+    if (userNumber < randomNumber) {
+        alert("Загадане число більше");
+    } else if (userNumber > randomNumber) {
+        alert("Загадане число менше");
+    } else {
+        alert("Вітаємо! Ви вгадали число!");
+    }
+
+} while (userNumber !== randomNumber);
+
+
+//Додаткове завданя
+let a = Number(prompt("Введіть перше число:"));
+let b = Number(prompt("Введіть друге число:"));
+
+while (b !== 0) {
+    let temp = b;
+    b = a % b;
+    a = temp;
+}
+
+console.log("НСД:", a);
