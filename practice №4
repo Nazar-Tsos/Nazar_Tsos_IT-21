@@ -1,0 +1,247 @@
+//Варіант 1
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<title>Список</title>
+</head>
+<body>
+
+<input type="text" id="input" placeholder="Введіть текст">
+<button id="addBtn">Додати</button>
+<button id="sortBtn">Сортувати</button>
+
+<ul id="list"></ul>
+
+<script>
+const input = document.getElementById("input");
+const addBtn = document.getElementById("addBtn");
+const sortBtn = document.getElementById("sortBtn");
+const list = document.getElementById("list");
+
+// Додавання елемента
+addBtn.addEventListener("click", () => {
+    const value = input.value.trim();
+
+    if (!value) {
+        alert("Введіть текст!");
+        return;
+    }
+
+    const li = document.createElement("li");
+    li.textContent = value;
+
+    // Видалення при кліку
+    li.addEventListener("click", () => {
+        li.remove();
+    });
+
+    list.appendChild(li);
+    input.value = "";
+});
+
+// Сортування
+sortBtn.addEventListener("click", () => {
+    const items = Array.from(list.children);
+
+    items.sort((a, b) => a.textContent.localeCompare(b.textContent));
+
+    list.innerHTML = "";
+    items.forEach(item => list.appendChild(item));
+});
+</script>
+
+</body>
+</html>
+
+
+
+
+//Варіант 2
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<title>Стилі</title>
+</head>
+<body>
+
+<div id="text">Це текст для змін</div>
+
+<button id="color">Змінити колір</button>
+<button id="font">Змінити шрифт</button>
+<button id="bg">Змінити фон</button>
+<button id="toggle">Сховати/показати</button>
+<button id="reset">Скинути</button>
+
+<script>
+const text = document.getElementById("text");
+
+document.getElementById("color").onclick = () => {
+    text.style.color = "red";
+};
+
+document.getElementById("font").onclick = () => {
+    text.style.fontSize = "24px";
+};
+
+document.getElementById("bg").onclick = () => {
+    document.body.style.backgroundColor = "lightblue";
+};
+
+document.getElementById("toggle").onclick = () => {
+    text.style.display = text.style.display === "none" ? "block" : "none";
+};
+
+document.getElementById("reset").onclick = () => {
+    text.style = "";
+    document.body.style = "";
+};
+</script>
+
+</body>
+</html>
+
+
+
+
+//Варіант 3
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<title>Таймер</title>
+</head>
+<body>
+
+<input type="number" id="timeInput" placeholder="Секунди">
+<div id="display">0</div>
+
+<button id="start">Старт</button>
+<button id="pause">Пауза</button>
+<button id="add">+10 сек</button>
+<button id="minus">-10 сек</button>
+
+<script>
+let time = 0;
+let interval = null;
+
+const display = document.getElementById("display");
+
+// Оновлення дисплею
+function updateDisplay() {
+    display.textContent = time;
+}
+
+// Старт
+document.getElementById("start").onclick = () => {
+    const inputVal = parseInt(document.getElementById("timeInput").value);
+
+    if (!interval) {
+        if (!time && inputVal > 0) time = inputVal;
+
+        interval = setInterval(() => {
+            if (time > 0) {
+                time--;
+                updateDisplay();
+            } else {
+                clearInterval(interval);
+                interval = null;
+                alert("Час вийшов!");
+            }
+        }, 1000);
+    }
+};
+
+// Пауза
+document.getElementById("pause").onclick = () => {
+    clearInterval(interval);
+    interval = null;
+};
+
+// Додати час
+document.getElementById("add").onclick = () => {
+    time += 10;
+    updateDisplay();
+};
+
+// Зменшити час
+document.getElementById("minus").onclick = () => {
+    time = Math.max(0, time - 10);
+    updateDisplay();
+};
+</script>
+
+</body>
+</html>
+
+
+
+
+//ВАріант 4
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<title>Фільтр</title>
+</head>
+<body>
+
+<input type="text" id="search" placeholder="Пошук...">
+<button id="sort">Сортувати</button>
+
+<ul id="list"></ul>
+<p id="noResult" style="display:none;">Нічого не знайдено</p>
+
+<script>
+const list = document.getElementById("list");
+const search = document.getElementById("search");
+const noResult = document.getElementById("noResult");
+
+let items = [];
+
+// Додаємо тестові дані
+["Яблуко", "Банан", "Груша", "Апельсин"].forEach(text => {
+    const obj = { text, date: new Date() };
+    items.push(obj);
+});
+
+function render(arr) {
+    list.innerHTML = "";
+
+    if (arr.length === 0) {
+        noResult.style.display = "block";
+        return;
+    }
+
+    noResult.style.display = "none";
+
+    arr.forEach(item => {
+        const li = document.createElement("li");
+        li.textContent = item.text;
+        list.appendChild(li);
+    });
+}
+
+// Фільтр
+search.addEventListener("input", () => {
+    const value = search.value.toLowerCase();
+
+    const filtered = items.filter(item =>
+        item.text.toLowerCase().includes(value)
+    );
+
+    render(filtered);
+});
+
+// Сортування
+document.getElementById("sort").onclick = () => {
+    items.sort((a, b) => a.text.localeCompare(b.text));
+    render(items);
+};
+
+render(items);
+</script>
+
+</body>
+</html>
