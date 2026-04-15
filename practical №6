@@ -1,0 +1,248 @@
+//Варіант 1
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<title>Тема</title>
+<style>
+  body {
+    transition: background 0.5s, color 0.5s;
+  }
+  .light { background: #fff; color: #000; }
+  .dark { background: #222; color: #fff; }
+</style>
+</head>
+<body>
+
+<h2>Зміна теми</h2>
+
+<select id="themeSelect">
+  <option value="light">Світла</option>
+  <option value="dark">Темна</option>
+</select>
+
+<br><br>
+<input type="color" id="colorPicker">
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const savedTheme = localStorage.getItem('theme') || 'light';
+  const savedColor = localStorage.getItem('color');
+
+  document.body.className = savedTheme;
+  document.getElementById('themeSelect').value = savedTheme;
+
+  if (savedColor) {
+    document.body.style.background = savedColor;
+  }
+});
+
+document.getElementById('themeSelect').addEventListener('change', (e) => {
+  localStorage.setItem('theme', e.target.value);
+  document.body.className = e.target.value;
+});
+
+document.getElementById('colorPicker').addEventListener('input', (e) => {
+  localStorage.setItem('color', e.target.value);
+  document.body.style.background = e.target.value;
+});
+</script>
+
+</body>
+</html>
+
+
+
+//Варіант 2
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<title>Відвідування</title>
+</head>
+<body>
+
+<h2>Лічильник відвідувань</h2>
+<p id="count"></p>
+
+<button onclick="resetHistory()">Скинути</button>
+
+<table border="1">
+  <thead>
+    <tr><th>#</th><th>Дата</th></tr>
+  </thead>
+  <tbody id="history"></tbody>
+</table>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  let visits = JSON.parse(localStorage.getItem('visits')) || [];
+
+  visits.push(new Date().toLocaleString());
+  localStorage.setItem('visits', JSON.stringify(visits));
+
+  document.getElementById('count').textContent = `Кількість відвідувань: ${visits.length}`;
+
+  const table = document.getElementById('history');
+  table.innerHTML = visits.map((v, i) => `<tr><td>${i+1}</td><td>${v}</td></tr>`).join('');
+});
+
+function resetHistory() {
+  localStorage.removeItem('visits');
+  location.reload();
+}
+</script>
+
+</body>
+</html>
+
+
+
+//Варіант 3
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<title>ToDo</title>
+</head>
+<body>
+
+<h2>Список справ</h2>
+
+<input id="task" placeholder="Завдання">
+<input type="date" id="deadline">
+<select id="priority">
+  <option value="low">Низький</option>
+  <option value="high">Високий</option>
+</select>
+
+<button onclick="addTask()">Додати</button>
+
+<ul id="list"></ul>
+
+<script>
+let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+
+function save() {
+  localStorage.setItem('tasks', JSON.stringify(tasks));
+}
+
+function render() {
+  const list = document.getElementById('list');
+  list.innerHTML = '';
+
+  tasks
+    .sort((a,b) => new Date(a.deadline) - new Date(b.deadline))
+    .forEach((t, i) => {
+      const li = document.createElement('li');
+      li.innerHTML = `
+        ${t.done ? '✔️' : ''}
+        ${t.text} (${t.deadline}) [${t.priority}]
+        <button onclick="toggle(${i})">✔</button>
+        <button onclick="del(${i})">❌</button>
+      `;
+      list.appendChild(li);
+    });
+}
+
+function addTask() {
+  const text = document.getElementById('task').value;
+  const deadline = document.getElementById('deadline').value;
+  const priority = document.getElementById('priority').value;
+
+  if (!text || !deadline) return alert('Заповніть всі поля');
+
+  tasks.push({ text, deadline, priority, done:false });
+  save();
+  render();
+}
+
+function toggle(i) {
+  tasks[i].done = !tasks[i].done;
+  save();
+  render();
+}
+
+function del(i) {
+  tasks.splice(i,1);
+  save();
+  render();
+}
+
+document.addEventListener('DOMContentLoaded', render);
+</script>
+
+</body>
+</html>
+
+
+
+//Варіант 4
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<title>Форма</title>
+</head>
+<body>
+
+<h2>Реєстрація / Вхід</h2>
+
+<input id="name" placeholder="Ім'я"><br><br>
+<input id="email" placeholder="Email"><br><br>
+<input id="phone" placeholder="Телефон"><br><br>
+<input id="password" type="password" placeholder="Пароль"><br><br>
+
+<button onclick="saveUser()">Зберегти</button>
+<button onclick="login()">Увійти</button>
+<button onclick="clearData()">Очистити</button>
+
+<p id="status"></p>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const user = JSON.parse(localStorage.getItem('user'));
+
+  if (user) {
+    document.getElementById('name').value = user.name;
+    document.getElementById('email').value = user.email;
+    document.getElementById('phone').value = user.phone;
+  }
+});
+
+function saveUser() {
+  const user = {
+    name: document.getElementById('name').value,
+    email: document.getElementById('email').value,
+    phone: document.getElementById('phone').value,
+    password: document.getElementById('password').value
+  };
+
+  if (!user.email || !user.password) {
+    return alert('Email і пароль обовʼязкові');
+  }
+
+  localStorage.setItem('user', JSON.stringify(user));
+  document.getElementById('status').textContent = 'Збережено!';
+}
+
+function login() {
+  const stored = JSON.parse(localStorage.getItem('user'));
+  const email = document.getElementById('email').value;
+  const password = document.getElementById('password').value;
+
+  if (stored && stored.email === email && stored.password === password) {
+    document.getElementById('status').textContent = 'Успішний вхід';
+  } else {
+    document.getElementById('status').textContent = 'Помилка входу';
+  }
+}
+
+function clearData() {
+  localStorage.removeItem('user');
+  location.reload();
+}
+</script>
+
+</body>
+</html>
