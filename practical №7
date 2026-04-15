@@ -1,0 +1,291 @@
+//Варіант 1
+<?php
+// 1
+$name = "Іван";
+$age = 20;
+$is_student = true;
+
+echo "Мене звати $name, мені $age років. ";
+echo $is_student ? "Я студент.<br>" : "Я не студент.<br>";
+
+// 2
+$numbers = [1,2,3,4,5];
+$sum = 0;
+
+foreach ($numbers as $num) {
+    $sum += $num;
+}
+echo "Сума: $sum <br>";
+
+// 3
+$user = [
+    "name" => "Іван",
+    "email" => "ivan@mail.com",
+    "phone" => "+380000000000"
+];
+
+echo "<ul>";
+foreach ($user as $key => $value) {
+    echo "<li>$key: $value</li>";
+}
+echo "</ul>";
+
+// 4
+if ($age > 18) {
+    echo "Повнолітній<br>";
+} else {
+    echo "Неповнолітній<br>";
+}
+
+// 5
+$grade = 85;
+
+if ($grade >= 90) echo "Відмінно";
+elseif ($grade >= 70) echo "Добре";
+elseif ($grade >= 50) echo "Задовільно";
+else echo "Незадовільно";
+?><?php
+// 1
+$name = "Іван";
+$age = 20;
+$is_student = true;
+
+echo "Мене звати $name, мені $age років. ";
+echo $is_student ? "Я студент.<br>" : "Я не студент.<br>";
+
+// 2
+$numbers = [1,2,3,4,5];
+$sum = 0;
+
+foreach ($numbers as $num) {
+    $sum += $num;
+}
+echo "Сума: $sum <br>";
+
+// 3
+$user = [
+    "name" => "Іван",
+    "email" => "ivan@mail.com",
+    "phone" => "+380000000000"
+];
+
+echo "<ul>";
+foreach ($user as $key => $value) {
+    echo "<li>$key: $value</li>";
+}
+echo "</ul>";
+
+// 4
+if ($age > 18) {
+    echo "Повнолітній<br>";
+} else {
+    echo "Неповнолітній<br>";
+}
+
+// 5
+$grade = 85;
+
+if ($grade >= 90) echo "Відмінно";
+elseif ($grade >= 70) echo "Добре";
+elseif ($grade >= 50) echo "Задовільно";
+else echo "Незадовільно";
+?>
+
+
+
+//Варіант 2
+<?php
+// 1
+$a = 5;
+$b = 10;
+
+echo "Сума: ".($a+$b)."<br>";
+echo "Різниця: ".($a-$b)."<br>";
+echo "Добуток: ".($a*$b)."<br>";
+echo "Ділення: ".($a/$b)."<br>";
+
+// 2
+$days = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
+
+echo "3-й день: ".$days[2]."<br>";
+echo "5-й день: ".$days[4]."<br>";
+
+// 3
+$products = [
+    "Хліб" => 20,
+    "Молоко" => 35,
+    "Сир" => 120
+];
+
+foreach ($products as $name => $price) {
+    echo "$name: $price грн<br>";
+}
+
+// 4
+$day = "Monday";
+
+switch ($day) {
+    case "Monday":
+        echo "Початок тижня<br>";
+        break;
+    case "Friday":
+        echo "Майже вихідні<br>";
+        break;
+    default:
+        echo "Звичайний день<br>";
+}
+
+// 5
+$x = 15;
+
+if ($x % 2 == 0) {
+    echo "Парне";
+} else {
+    echo "Непарне";
+}
+?>
+
+
+
+//Варіант 3
+<?php
+// 1
+$price1 = 200;
+$price2 = 150;
+$price3 = 300;
+
+$total = $price1 + $price2 + $price3;
+echo "Загальна сума: $total грн<br>";
+
+// 2
+$movies = ["Inception", "Titanic", "Avatar", "Matrix", "Interstellar"];
+
+foreach ($movies as $movie) {
+    echo "$movie<br>";
+}
+
+// 3
+$user = [
+    "login" => "admin",
+    "password" => "1234",
+    "email" => "admin@mail.com"
+];
+
+foreach ($user as $key => $value) {
+    echo "$key: $value<br>";
+}
+
+// 4
+if ($total > 500) {
+    $total *= 0.9;
+}
+echo "Після знижки: $total грн<br>";
+
+// 5
+$input_login = "admin";
+$input_password = "1234";
+
+if ($input_login === $user["login"] && $input_password === $user["password"]) {
+    echo "Вхід успішний";
+} else {
+    echo "Невірні дані";
+}
+?>
+
+
+
+//Варіант 4
+<?php
+// 1
+$a = 7;
+$b = 12;
+
+$max = ($a > $b) ? $a : $b;
+$min = ($a < $b) ? $a : $b;
+
+echo "Максимум: $max, Мінімум: $min<br>";
+
+// 2
+$numbers = [10, 20, 30, 40, 50];
+$sum = array_sum($numbers);
+$avg = $sum / count($numbers);
+
+echo "Середнє: $avg<br>";
+
+// 3
+$students = [
+    "Іванов І.І." => 85,
+    "Петров П.П." => 75,
+    "Сидоров С.С." => 90
+];
+
+foreach ($students as $name => $grade) {
+    if ($grade > 80) {
+        echo "$name: $grade<br>";
+    }
+}
+
+// 4
+$num = 12;
+
+if ($num % 3 == 0 || $num % 5 == 0) {
+    echo "Кратне 3 або 5<br>";
+}
+
+// 5
+for ($i = 1; $i <= 10; $i++) {
+    echo "7 x $i = ".(7*$i)."<br>";
+}
+?>
+
+
+
+//Варіант 5
+<?php
+// 1
+$first_name = "Іван";
+$last_name = "Петренко";
+$year_of_birth = 2000;
+
+$current_year = date("Y");
+$age = $current_year - $year_of_birth;
+
+echo "ПІБ: $first_name $last_name<br>";
+echo "Вік: $age<br>";
+
+// 2
+$countries = ["Україна", "Польща", "Німеччина", "Франція"];
+
+echo "<ol>";
+foreach ($countries as $country) {
+    echo "<li>$country</li>";
+}
+echo "</ol>";
+
+// 3
+$cities = [
+    "Київ" => 3000000,
+    "Львів" => 700000,
+    "Одеса" => 1000000
+];
+
+foreach ($cities as $city => $population) {
+    if ($population > 1000000) {
+        echo "$city: $population<br>";
+    }
+}
+
+// 4
+$number = 8;
+
+echo ($number % 2 == 0) ? "Парне<br>" : "Непарне<br>";
+
+// 5
+$year = date("Y");
+
+if ($year % 4 == 0) {
+    echo "Високосний рік";
+} else {
+    echo "Не високосний рік";
+}
+?>
