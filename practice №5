@@ -1,0 +1,132 @@
+//Завдання 1 
+<h2>Користувачі</h2>
+<ul id="users"></ul>
+<p id="error"></p>
+
+<script>
+fetch('https://jsonplaceholder.typicode.com/users')
+  .then(response => response.json())
+  .then(users => {
+    const list = document.getElementById('users');
+
+    users.forEach(user => {
+      const li = document.createElement('li');
+      li.textContent = `${user.name} (${user.email})`;
+      list.appendChild(li);
+    });
+  })
+  .catch(() => {
+    document.getElementById('error').textContent = 'Помилка завантаження';
+  });
+</script>
+
+
+
+//ЗАвдання 2 
+<h2>Створити пост</h2>
+
+<form id="postForm">
+  <input type="text" id="title" placeholder="Title" required><br><br>
+  <textarea id="body" placeholder="Body" required></textarea><br><br>
+  <button type="submit">Відправити</button>
+</form>
+
+<script>
+document.getElementById('postForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+
+  const title = document.getElementById('title').value;
+  const body = document.getElementById('body').value;
+
+  fetch('https://jsonplaceholder.typicode.com/posts', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      title: title,
+      body: body,
+      userId: 1
+    })
+  })
+  .then(response => response.json())
+  .then(data => {
+    console.log('Відповідь сервера:', data);
+    document.getElementById('postForm').reset();
+  });
+});
+</script>
+
+
+
+//Завдання №3
+<h2>Пости</h2>
+<div id="posts"></div>
+<p id="error"></p>
+
+<script>
+async function loadPosts() {
+  try {
+    const response = await fetch('https://jsonplaceholder.typicode.com/posts');
+    const posts = await response.json();
+
+    const container = document.getElementById('posts');
+
+    posts.slice(0, 10).forEach(post => {
+      const div = document.createElement('div');
+      div.innerHTML = `<h3>${post.title}</h3><p>${post.body}</p>`;
+      container.appendChild(div);
+    });
+
+  } catch (error) {
+    document.getElementById('error').textContent = 'Помилка завантаження';
+  }
+}
+
+loadPosts();
+</script>
+
+
+
+//Завдання №4
+<h2>Профіль користувача</h2>
+<div id="user"></div>
+
+<h2>Його пости</h2>
+<div id="userPosts"></div>
+
+<script>
+async function loadUserData() {
+  try {
+    const [userRes, postsRes] = await Promise.all([
+      fetch('https://jsonplaceholder.typicode.com/users/1'),
+      fetch('https://jsonplaceholder.typicode.com/posts?userId=1')
+    ]);
+
+    const user = await userRes.json();
+    const posts = await postsRes.json();
+
+    // Вивід користувача
+    const userDiv = document.getElementById('user');
+    userDiv.innerHTML = `
+      <p><strong>Ім'я:</strong> ${user.name}</p>
+      <p><strong>Email:</strong> ${user.email}</p>
+      <p><strong>Місто:</strong> ${user.address.city}</p>
+    `;
+
+    // Вивід постів
+    const postsDiv = document.getElementById('userPosts');
+
+    posts.forEach(post => {
+      const div = document.createElement('div');
+      div.innerHTML = `<h3>${post.title}</h3><p>${post.body}</p>`;
+      postsDiv.appendChild(div);
+    });
+
+  } catch (error) {
+    document.body.innerHTML += '<p>Помилка завантаження</p>';
+  }
+}
+
+loadUserData();
+</script>
