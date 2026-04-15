@@ -1,0 +1,152 @@
+//Варіант 1
+<?php
+$users = [
+    ["name" => "Ivan", "age" => 17, "email" => "ivan@test.com"],
+    ["name" => "Olena", "age" => 22, "email" => "olena@test.com"],
+    ["name" => "Petro", "age" => 30, "email" => "petro@test.com"],
+    ["name" => "Anna", "age" => 19, "email" => "anna@test.com"],
+    ["name" => "Mykola", "age" => 15, "email" => "mykola@test.com"],
+    ["name" => "Sofia", "age" => 25, "email" => "sofia@test.com"],
+    ["name" => "Oleh", "age" => 18, "email" => "oleh@test.com"],
+    ["name" => "Iryna", "age" => 27, "email" => "iryna@test.com"],
+    ["name" => "Dmytro", "age" => 16, "email" => "dmytro@test.com"],
+    ["name" => "Kateryna", "age" => 21, "email" => "katya@test.com"],
+];
+
+#[Attribute]
+class OnlyAdults {
+    public function __construct() {
+        file_put_contents("log.txt", "OnlyAdults filter used\n", FILE_APPEND);
+    }
+}
+
+#[OnlyAdults]
+function filterAdults($user) {
+    return $user["age"] >= 18;
+}
+
+function compareByNameLength($a, $b) {
+    return strlen($a["name"]) <=> strlen($b["name"]);
+}
+
+$adults = array_values(array_filter($users, "filterAdults"));
+usort($adults, "compareByNameLength");
+
+?>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Users</title>
+</head>
+<body>
+
+<h2>👥 Користувачі (18+)</h2>
+
+<table border="1" cellpadding="5">
+    <tr>
+        <th>Name</th>
+        <th>Age</th>
+        <th>Email</th>
+    </tr>
+
+    <?php foreach ($adults as $u): ?>
+        <tr>
+            <td><?= $u["name"] ?></td>
+            <td><?= $u["age"] ?></td>
+            <td><?= $u["email"] ?></td>
+        </tr>
+    <?php endforeach; ?>
+
+</table>
+
+</body>
+</html>
+
+
+
+
+//Варіант 2
+<?php
+#[Attribute]
+class ValidatePassword {
+    public static int $failCount = 0;
+
+    public function logFail() {
+        self::$failCount++;
+        file_put_contents("log.txt", "Password fail: " . self::$failCount . "\n", FILE_APPEND);
+    }
+}
+
+#[ValidatePassword]
+function isStrongPassword($password) {
+    $valid =
+        preg_match('/[A-Z]/', $password) &&
+        preg_match('/[0-9]/', $password) &&
+        strlen($password) >= 8;
+
+    if (!$valid) {
+        (new ValidatePassword())->logFail();
+    }
+
+    return $valid;
+}
+
+function generatePassword($length, $callback) {
+    $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+
+    do {
+        $password = '';
+        for ($i = 0; $i < $length; $i++) {
+            $password .= $chars[random_int(0, strlen($chars) - 1)];
+        }
+    } while (!$callback($password));
+
+    return $password;
+}
+
+$passwords = [];
+
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $count = (int)$_POST["count"];
+    $length = (int)$_POST["length"];
+
+    for ($i = 0; $i < $count; $i++) {
+        $passwords[] = generatePassword($length, "isStrongPassword");
+    }
+}
+
+?>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Password Generator</title>
+</head>
+<body>
+
+<h2> Генератор паролів</h2>
+
+<form method="POST">
+    <label>Кількість паролів:</label><br>
+    <input type="number" name="count" required><br><br>
+
+    <label>Довжина пароля:</label><br>
+    <input type="number" name="length" required><br><br>
+
+    <button type="submit">Згенерувати</button>
+</form>
+
+<?php if (!empty($passwords)): ?>
+    <h3>Згенеровані паролі:</h3>
+    <ul>
+        <?php foreach ($passwords as $p): ?>
+            <li><?= $p ?></li>
+        <?php endforeach; ?>
+    </ul>
+<?php endif; ?>
+
+</body>
+</html>
