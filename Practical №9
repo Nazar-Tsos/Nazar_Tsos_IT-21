@@ -1,0 +1,78 @@
+//Варіант 1
+<?php
+$name = $email = $message = "";
+$success = "";
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $name = htmlspecialchars(trim($_POST["name"]));
+    $email = filter_var($_POST["email"], FILTER_VALIDATE_EMAIL);
+    $message = htmlspecialchars(trim($_POST["message"]));
+
+    if ($email && strlen($message) >= 20) {
+        $success = "Повідомлення успішно надіслано!";
+    } else {
+        $success = "Помилка: перевірте дані.";
+    }
+}
+?>
+
+<form method="post">
+    Ім’я: <input type="text" name="name" required><br>
+    Email: <input type="email" name="email" required><br>
+    Повідомлення:<br>
+    <textarea name="message" required></textarea><br>
+    <button type="submit">Надіслати</button>
+</form>
+
+<p><?= $success ?></p>
+
+
+
+//Варіант 4
+<?php
+$result = "";
+
+$prices = [
+    "Товар1" => 100,
+    "Товар2" => 200,
+    "Товар3" => 300
+];
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $name = htmlspecialchars(trim($_POST["name"]));
+    $email = filter_var($_POST["email"], FILTER_VALIDATE_EMAIL);
+    $product = $_POST["product"];
+    $quantity = intval($_POST["quantity"]);
+
+    if ($email && $quantity >= 1 && $quantity <= 100) {
+        $total = $prices[$product] * $quantity;
+
+        $result = "Замовлення:<br>
+        Ім’я: $name<br>
+        Email: $email<br>
+        Товар: $product<br>
+        Кількість: $quantity<br>
+        Сума: $total грн";
+    } else {
+        $result = "Помилка у введених даних.";
+    }
+}
+?>
+
+<form method="post">
+    Ім’я: <input type="text" name="name" required><br>
+    Email: <input type="email" name="email" required><br>
+
+    Товар:
+    <select name="product">
+        <option value="Товар1">Товар1</option>
+        <option value="Товар2">Товар2</option>
+        <option value="Товар3">Товар3</option>
+    </select><br>
+
+    Кількість: <input type="number" name="quantity" required><br>
+
+    <button type="submit">Замовити</button>
+</form>
+
+<p><?= $result ?></p>
