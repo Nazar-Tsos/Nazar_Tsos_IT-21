@@ -1,0 +1,85 @@
+//Варіант 3
+CREATE DATABASE shop;
+USE shop;
+
+CREATE TABLE products (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    product_name VARCHAR(100) NOT NULL,
+    category VARCHAR(50),
+    price DECIMAL(10,2),
+    quantity INT
+);
+
+CREATE TABLE orders (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    product_id INT,
+    customer_name VARCHAR(50),
+    order_date DATE,
+    FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
+);
+
+CREATE TABLE reviews (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    product_id INT,
+    review_text TEXT,
+    rating INT,
+    FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE SET NULL
+);
+
+CREATE TABLE inventory_logs (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    product_id INT,
+    change_date DATE,
+    change_amount INT,
+    FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE SET NULL
+);
+
+INSERT INTO products (product_name, category, price, quantity) VALUES
+('Ноутбук', 'Електроніка', 25000.00, 10),
+('Мишка', 'Електроніка', 500.00, 50),
+('Зошит', 'Канцелярія', 40.00, 200),
+('Ручка', 'Канцелярія', 15.00, 500),
+('Стілець', 'Меблі', 1200.00, 20);
+
+INSERT INTO orders (product_id, customer_name, order_date) VALUES
+(1, 'Іван Петренко', '2026-05-01'),
+(2, 'Олена Коваль', '2026-05-02'),
+(3, 'Андрій Шевченко', '2026-05-03'),
+(4, 'Марія Бондар', '2026-05-04'),
+(5, 'Петро Іванов', '2026-05-05');
+
+INSERT INTO reviews (product_id, review_text, rating) VALUES
+(1, 'Чудовий ноутбук!', 5),
+(2, 'Зручна мишка', 4),
+(3, 'Якісний зошит', 5);
+
+INSERT INTO inventory_logs (product_id, change_date, change_amount) VALUES
+(1, '2026-05-01', -2),
+(2, '2026-05-02', -5),
+(3, '2026-05-03', +20),
+(4, '2026-05-04', -10),
+(5, '2026-05-05', +5);
+
+UPDATE products
+SET price = 23000.00
+WHERE id = 1;
+
+UPDATE orders
+SET order_date = '2026-05-10'
+WHERE id = 1;
+
+DELETE FROM products
+WHERE id = 2;
+
+
+SELECT * FROM products;
+
+SELECT * FROM products
+WHERE category = 'Електроніка';
+
+SELECT * FROM products
+ORDER BY price ASC;
+
+SELECT * FROM products
+WHERE category = 'Канцелярія'
+ORDER BY quantity ASC;
