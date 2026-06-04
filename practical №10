@@ -1,0 +1,147 @@
+//Варіант 1
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Варіант 1</title>
+</head>
+<body>
+
+<?php
+
+$name = "Іван";
+$age = 20;
+$is_student = true;
+
+echo "Мене звати $name, мені $age років. ";
+echo $is_student ? "Я студент." : "Я не студент.";
+
+echo "<hr>";
+
+$numbers = [1, 2, 3, 4, 5];
+
+$sum = array_sum($numbers);
+
+echo "Сума елементів масиву: $sum";
+
+echo "<hr>";
+
+$user = [
+    "name" => "Іван",
+    "email" => "ivan@gmail.com",
+    "phone" => "+380991112233"
+];
+
+echo "<ul>";
+foreach ($user as $key => $value) {
+    echo "<li><strong>$key:</strong> $value</li>";
+}
+echo "</ul>";
+
+echo "<hr>";
+
+if ($age > 18) {
+    echo "Вік більше 18 років.";
+} else {
+    echo "Вік менше або дорівнює 18 рокам.";
+}
+
+echo "<hr>";
+
+$grade = 85;
+
+if ($grade >= 90) {
+    echo "Відмінно";
+} elseif ($grade >= 70) {
+    echo "Добре";
+} elseif ($grade >= 50) {
+    echo "Задовільно";
+} else {
+    echo "Незадовільно";
+}
+
+?>
+
+</body>
+</html>
+
+
+
+
+//Варіант 2
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Варіант 2</title>
+</head>
+<body>
+
+<?php
+
+$a = 5;
+$b = 10;
+
+echo "Сума: " . ($a + $b) . "<br>";
+echo "Різниця: " . ($a - $b) . "<br>";
+echo "Добуток: " . ($a * $b) . "<br>";
+echo "Ділення: " . ($a / $b) . "<br>";
+
+echo "<hr>";
+
+$days = [
+    "Понеділок",
+    "Вівторок",
+    "Середа",
+    "Четвер",
+    "П’ятниця",
+    "Субота",
+    "Неділя"
+];
+
+echo "3-й день: " . $days[2] . "<br>";
+echo "5-й день: " . $days[4] . "<br>";
+
+echo "<hr>";
+
+$products = [
+    "Ноутбук" => 25000,
+    "Миша" => 800,
+    "Клавіатура" => 1500
+];
+
+foreach ($products as $name => $price) {
+    echo "$name - $price грн<br>";
+}
+
+echo "<hr>";
+
+$day = "Monday" 
+
+switch ($day) {
+    case "Monday":
+        echo "Початок робочого тижня";
+        break;
+
+    case "Friday":
+        echo "Майже вихідні";
+        break;
+
+    case "Sunday":
+        echo "Вихідний день";
+        break;
+
+    default:
+        echo "Звичайний день";
+}
+
+echo "<hr>";
+
+$x = 15;
+
+echo ($x % 2 == 0) ? "Парне число" : "Непарне число";
+
+?>
+
+</body>
+</html>
