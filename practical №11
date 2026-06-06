@@ -1,0 +1,293 @@
+// Варіат 1
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Форма зворотного зв'язку</title>
+</head>
+<body>
+
+<?php
+$messageSent = false;
+$errors = [];
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+    $name = trim($_POST["name"]);
+    $email = trim($_POST["email"]);
+    $message = trim($_POST["message"]);
+
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $errors[] = "Некоректний email.";
+    }
+
+    if (strlen($message) < 20) {
+        $errors[] = "Повідомлення повинно містити мінімум 20 символів.";
+    }
+
+    if (empty($errors)) {
+        $messageSent = true;
+    }
+}
+?>
+
+<?php if ($messageSent): ?>
+    <h3>Повідомлення успішно надіслано!</h3>
+<?php else: ?>
+
+    <?php
+    foreach ($errors as $error) {
+        echo "<p style='color:red;'>$error</p>";
+    }
+    ?>
+
+    <form method="post">
+        Ім'я:<br>
+        <input type="text" name="name" required><br><br>
+
+        Email:<br>
+        <input type="email" name="email" required><br><br>
+
+        Повідомлення:<br>
+        <textarea name="message" required></textarea><br><br>
+
+        <button type="submit">Надіслати</button>
+    </form>
+
+<?php endif; ?>
+
+</body>
+</html>
+
+
+
+//Варіант 2
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Реєстрація</title>
+</head>
+<body>
+
+<?php
+$errors = [];
+$success = false;
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+    $login = trim($_POST["login"]);
+    $password = trim($_POST["password"]);
+    $confirm = trim($_POST["confirm"]);
+
+    if (!filter_var($login, FILTER_VALIDATE_REGEXP, [
+        "options" => [
+            "regexp" => "/^[a-zA-Z0-9_]+$/"
+        ]
+    ])) {
+        $errors[] = "Логін містить недопустимі символи.";
+    }
+
+    if ($password !== $confirm) {
+        $errors[] = "Паролі не збігаються.";
+    }
+
+    if (empty($errors)) {
+        $success = true;
+    }
+}
+?>
+
+<?php if ($success): ?>
+    <h3>Реєстрація успішна!</h3>
+<?php else: ?>
+
+    <?php
+    foreach ($errors as $error) {
+        echo "<p style='color:red;'>$error</p>";
+    }
+    ?>
+
+    <form method="post">
+        Логін:<br>
+        <input type="text" name="login" required><br><br>
+
+        Пароль:<br>
+        <input type="password" name="password" required><br><br>
+
+        Підтвердження паролю:<br>
+        <input type="password" name="confirm" required><br><br>
+
+        <button type="submit">Зареєструватися</button>
+    </form>
+
+<?php endif; ?>
+
+</body>
+</html>
+
+
+
+
+//Варіант 3
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Анкета</title>
+</head>
+<body>
+
+<?php
+$errors = [];
+
+$name = $_POST['name'] ?? '';
+$age = $_POST['age'] ?? '';
+$gender = $_POST['gender'] ?? '';
+$hobbies = $_POST['hobbies'] ?? [];
+$description = $_POST['description'] ?? '';
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+    if (!filter_var($age, FILTER_VALIDATE_INT,
+        ["options" => ["min_range" => 10, "max_range" => 100]])) {
+        $errors[] = "Вік повинен бути від 10 до 100.";
+    }
+
+    if (empty($errors)) {
+
+        echo "<h3>Дані анкети</h3>";
+
+        echo "Ім'я: " . htmlspecialchars($name) . "<br>";
+        echo "Вік: " . htmlspecialchars($age) . "<br>";
+        echo "Стать: " . htmlspecialchars($gender) . "<br>";
+        echo "Хобі: " . htmlspecialchars(implode(", ", $hobbies)) . "<br>";
+        echo "Опис: " . nl2br(htmlspecialchars($description));
+
+        exit;
+    }
+}
+?>
+
+<?php
+foreach ($errors as $error) {
+    echo "<p style='color:red;'>$error</p>";
+}
+?>
+
+<form method="post">
+
+    Ім'я:<br>
+    <input type="text" name="name"
+           value="<?= htmlspecialchars($name) ?>"><br><br>
+
+    Вік:<br>
+    <input type="number" name="age"
+           value="<?= htmlspecialchars($age) ?>"><br><br>
+
+    Стать:<br>
+    <input type="radio" name="gender" value="Чоловіча"
+        <?= $gender == 'Чоловіча' ? 'checked' : '' ?>> Чоловіча
+
+    <input type="radio" name="gender" value="Жіноча"
+        <?= $gender == 'Жіноча' ? 'checked' : '' ?>> Жіноча
+    <br><br>
+
+    Хобі:<br>
+    <input type="checkbox" name="hobbies[]" value="Спорт"> Спорт
+    <input type="checkbox" name="hobbies[]" value="Музика"> Музика
+    <input type="checkbox" name="hobbies[]" value="Подорожі"> Подорожі
+    <br><br>
+
+    Опис:<br>
+    <textarea name="description"><?= htmlspecialchars($description) ?></textarea>
+    <br><br>
+
+    <button type="submit">Надіслати</button>
+
+</form>
+
+</body>
+</html>
+
+
+
+
+//Варіант 4
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Замовлення товару</title>
+</head>
+<body>
+
+<?php
+
+$products = [
+    "Ноутбук" => 30000,
+    "Мишка" => 500,
+    "Клавіатура" => 1200
+];
+
+$errors = [];
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+    $name = htmlspecialchars(trim($_POST["name"]));
+    $email = htmlspecialchars(trim($_POST["email"]));
+    $product = $_POST["product"];
+    $quantity = filter_input(INPUT_POST, "quantity", FILTER_VALIDATE_INT);
+
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $errors[] = "Некоректний email.";
+    }
+
+    if ($quantity < 1 || $quantity > 100) {
+        $errors[] = "Кількість повинна бути від 1 до 100.";
+    }
+
+    if (empty($errors)) {
+
+        $total = $products[$product] * $quantity;
+
+        echo "<h3>Підсумок замовлення</h3>";
+        echo "Покупець: $name<br>";
+        echo "Email: " . htmlspecialchars($email) . "<br>";
+        echo "Товар: " . htmlspecialchars($product) . "<br>";
+        echo "Кількість: $quantity<br>";
+        echo "Сума: $total грн";
+
+        exit;
+    }
+}
+
+foreach ($errors as $error) {
+    echo "<p style='color:red;'>$error</p>";
+}
+?>
+
+<form method="post">
+
+    Ім'я покупця:<br>
+    <input type="text" name="name" required><br><br>
+
+    Email:<br>
+    <input type="email" name="email" required><br><br>
+
+    Товар:<br>
+    <select name="product">
+        <option>Ноутбук</option>
+        <option>Мишка</option>
+        <option>Клавіатура</option>
+    </select><br><br>
+
+    Кількість:<br>
+    <input type="number" name="quantity" required><br><br>
+
+    <button type="submit">Замовити</button>
+
+</form>
+
+</body>
+</html>
